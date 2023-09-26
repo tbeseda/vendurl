@@ -1,0 +1,15 @@
+{
+  "name": "vendurl",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "vendurl": "index.js"
+  },
+  "scripts": {
+    "test": "cd test && ./test.sh"
+  },
+  "author": "tbeseda",
+  "license": "Apache-2.0"
+}

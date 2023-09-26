@@ -1,0 +1,20 @@
+{
+  "type": "module",
+  "scripts": {
+    "postinstall": "vendurl"
+  },
+  "devDependencies": {
+    "vendurl": "file:../.."
+  },
+  "vendurl": {
+    "_destination": "./vendor",
+    "_bundle": true,
+    "_provider": "https://esm.sh",
+    "packages": {
+      "temporal.js": "@js-temporal/polyfill",
+      "chalk4.mjs": "chalk@4",
+      "leftpad.cjs": "https://unpkg.com/leftpad@0.0.1/index.js",
+      "FAKE": "doesntexist@6.6.6"
+    }
+  }
+}
