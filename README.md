@@ -27,15 +27,13 @@ Add packages to the "vendurl" key in `package.json` by setting a filename with e
 
 ```json
 {
-  ...
   "vendurl": {
     "packages": {
       "temporal.js": "@js-temporal/polyfill",
       "chalk4.mjs": "chalk@4",
-      "leftpad.cjs": "https://unpkg.com/leftpad@0.0.1/index.js",
+      "leftpad.cjs": "https://unpkg.com/leftpad@0.0.1/index.js"
     }
   }
-  ...
 }
 ```
 
@@ -47,7 +45,7 @@ npx vendurl
 
 Optional `package.json` additions:
 
-```json
+```js
 {
   "scripts": {
     "postinstall": "vendurl"
@@ -56,7 +54,7 @@ Optional `package.json` additions:
     "destination": "./src/lib",       // default: "./vendor"
     "provider": "https://unpkg.com/", // default: "https://esm.sh/"
     "bundle": false,                  // esm.sh specific. default: true
-    "packages": { ... }
+    "packages": { }
   }
 }
 ```
@@ -69,7 +67,7 @@ npx vendurl --clean
 
 ## How it works
 
-Mostly with `fetch` and `fs`: download the file and save it. `index.js` is less than 100 lines of code and has no dependencies; check it out!
+Mostly with `fetch` and `fs`: download the file and save it. `index.js` is less than 100 lines of code [this README is longer (sry)] and has no dependencies; check it out!
 
 `vendurl` also leans on [esm.sh](https://esm.sh) conventions to resolve specific versioned bundles.
 
