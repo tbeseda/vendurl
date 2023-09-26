@@ -2,13 +2,17 @@
   "name": "vendurl",
   "version": "0.0.1",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tbeseda/vendurl.git"
+  },
   "type": "module",
   "main": "index.js",
   "bin": {
     "vendurl": "index.js"
   },
   "scripts": {
-    "test": "cd test && ./test.sh"
+    "test": "cd test && bash ./test.sh"
   },
   "author": "tbeseda",
   "license": "Apache-2.0"

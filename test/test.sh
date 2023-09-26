@@ -1,6 +1,8 @@
 cd ./mock-project
 npm i
-echo "\n./vendor/ contents:"
+echo ""
+echo "ls -l ./vendor"
 ls -l ./vendor
-echo "\nnode index.js:"
+echo ""
+echo "node index.js"
 node index.js

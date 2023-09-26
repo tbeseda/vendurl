@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "postinstall": "vendurl"
+    "postinstall": "vendurl --clean"
   },
   "devDependencies": {
     "vendurl": "file:../.."
