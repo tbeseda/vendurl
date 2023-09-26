@@ -100,5 +100,5 @@ I hear good things about [Ree.js](https://ree.js.org).
 Good idea! I can work on that or feel free to send a PR.  
 In the meantime: currently, search params on the specifier are not stripped, so you could try that!
 
-**I'm getting esm.sh HTTP errors.**
+**I'm getting esm.sh HTTP errors.**  
 You may want to check [esm.sh's status page](https://esm.instatus.com).
