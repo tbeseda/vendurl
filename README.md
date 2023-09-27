@@ -100,7 +100,7 @@ Not likely. The dependency graphs for some "modern" tools are a mess and rely on
 **Per-package configuration?**  
 💁 "I want to put some files ovr here, and some over there. All from different sources."  
 This is probably not the tool for you. But if a PR can achieve this in a simple way, I'm open to it.  
-I hear good things about [Ree.js](https://ree.js.org).
+[Vite](https://vitejs.dev) works well for elaborate builds.
 
 **ESBuild options, WASM, and other esm.sh features?**  
 Good idea! I can work on that or feel free to send a PR.  
