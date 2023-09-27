@@ -43,6 +43,14 @@ Run `vendurl` to download and store the packages:
 npx vendurl
 ```
 
+Use the packages in your code:
+
+```js
+import { Temporal } from './vendor/temporal.js';
+import chalk from './vendor/chalk4.mjs';
+import leftpad from './vendor/leftpad.cjs';
+```
+
 Optional `package.json` additions:
 
 ```js
