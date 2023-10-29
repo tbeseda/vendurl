@@ -2,6 +2,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
+import { createInterface } from 'node:readline/promises'
 import { URL } from 'node:url'
 
 const help = ['help', '--help', '-h'].some((arg) => process.argv.includes(arg))
@@ -19,14 +20,32 @@ const pkg = JSON.parse(packageString)
 const { name, vendurl } = pkg
 
 const clean = process.argv.includes('--clean')
+let yes = ['yes', '--yes', '-y'].some((arg) => process.argv.includes(arg))
 
-if (!(vendurl && vendurl.packages && typeof vendurl.packages === 'object')) { throw new Error(`"${name} is missing "vendurl" in package.json`) }
+if (!(vendurl && vendurl.packages && typeof vendurl.packages === 'object')) {
+  throw new Error(`"${name} is missing "vendurl" in package.json`)
+}
 
+// defaults
 const { bundle = true, destination = './vendor', packages, provider = ESMSH } = vendurl
 const fullDestination = path.join(cwd, destination)
 
 try {
   if (clean) {
+    if (!yes) {
+      const rl = createInterface({ input: process.stdin, output: process.stdout })
+
+      const confirm = await rl.question(`Are you sure you want to remove "${fullDestination}"? (y/N) `)
+      rl.close()
+
+      yes = confirm.toLowerCase() === 'y'
+    }
+
+    if (!yes) {
+      console.log('Aborting')
+      process.exit(0)
+    }
+
     fs.rmSync(fullDestination, { recursive: true, force: true })
     console.log(`Removed "${fullDestination}"`)
   }
