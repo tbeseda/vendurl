@@ -103,7 +103,7 @@ for (const [filename, specifier] of Object.entries(packages)) {
 // download packages
 for (let { filename, specifier, url } of manifest) {
   if (url) {
-    if (verbose) console.log(`Creating "${filename}" from "${specifier}"`)
+    if (verbose) console.log(grey(`Creating "${filename}" from "${specifier}"`))
     try {
       let response = await fetch(url)
 
@@ -115,7 +115,7 @@ for (let { filename, specifier, url } of manifest) {
       const esmId = response.headers.get('X-Esm-Id') // esm.sh final URL path
       if (esmId) {
         url = new URL(esmId, provider)
-        if (verbose) console.log(grey(`Redirecting to ${url}`))
+        if (verbose) console.log(grey(`Redirected to ${url}`))
         response = await fetch(url)
       }
 

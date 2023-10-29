@@ -16,11 +16,13 @@
   "scripts": {
     "lint": "eslint .",
     "lint.fix": "npm run lint -- --fix",
+    "release": "release-it",
     "test": "cd test && bash ./test.sh"
   },
   "devDependencies": {
     "eslint": "^8.52.0",
-    "eslint-config-standard": "^17.1.0"
+    "eslint-config-standard": "^17.1.0",
+    "release-it": "^16.2.1"
   },
   "eslintConfig": {
     "extends": "standard",
