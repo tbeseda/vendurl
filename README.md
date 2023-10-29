@@ -89,9 +89,11 @@ npx vendurl --clean --yes
 
 ## How it works
 
-Mostly with `fetch` and `fs`: download the file and save it. `index.js` is less than 100 lines of code [this README is longer (sry)] and has no dependencies; check it out!
+Mostly with `fetch` and `fs`: download the file and save it. `index.js` is brief and has no dependencies; check it out!
 
-`vendurl` also leans on [esm.sh](https://esm.sh) conventions to resolve specific versioned bundles.
+`vendurl` leans on [esm.sh](https://esm.sh) conventions to resolve specific versioned bundles.
+
+### Module Resolution
 
 For example, the specifier of "chalk" (currently) resolves to the cached build as such:  
 `chalk` → `chalk@latest` → `chalk@5.3.0` → `/v132/chalk@5.3.0/es2021/chalk.bundle.mjs`.
@@ -113,8 +115,7 @@ Not likely. The dependency graphs for some "modern" tools are a mess and rely on
 
 **Per-package configuration?**  
 💁 "I want to put some files ovr here, and some over there. All from different sources."  
-This is probably not the tool for you. But if a PR can achieve this in a simple way, I'm open to it.  
-[Vite](https://vitejs.dev) works well for elaborate builds.
+Working on it! Should be available in `v0.3.0`.
 
 **ESBuild options, WASM, and other esm.sh features?**  
 Good idea! I can work on that or feel free to send a PR.  
