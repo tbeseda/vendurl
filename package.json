@@ -1,7 +1,9 @@
 {
   "name": "vendurl",
   "version": "0.1.1",
-  "description": "",
+  "description": "Vendor (verb: download and store) a JS dependency from a URL.",
+  "author": "tbeseda",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tbeseda/vendurl.git"
@@ -12,8 +14,31 @@
     "vendurl": "index.js"
   },
   "scripts": {
+    "lint": "eslint .",
+    "lint.fix": "npm run lint -- --fix",
     "test": "cd test && bash ./test.sh"
   },
-  "author": "tbeseda",
-  "license": "Apache-2.0"
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "eslint-config-standard": "^17.1.0"
+  },
+  "eslintConfig": {
+    "extends": "standard",
+    "ignorePatterns": [
+      "**/vendor"
+    ],
+    "rules": {
+      "space-unary-ops": 0,
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ]
+    }
+  },
+  "keywords": [
+    "javascript",
+    "vendor",
+    "bundle",
+    "esm.sh"
+  ]
 }
