@@ -67,10 +67,24 @@ Optional `package.json` additions:
 }
 ```
 
-Use the clean flag to nuke the destination folder before downloading:
+### CLI Options
+
+Verbose output is available with `--verbose` or `-v`:
+
+```sh
+npx vendurl --verbose
+```
+
+Use the `--clean` flag to nuke the destination folder before downloading:
 
 ```sh
 npx vendurl --clean
+```
+
+Pass `--yes` to skip the confirmation prompt:
+
+```sh
+npx vendurl --clean --yes
 ```
 
 ## How it works

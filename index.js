@@ -7,7 +7,7 @@ import { URL } from 'node:url'
 
 const help = ['help', '--help', '-h'].some((arg) => process.argv.includes(arg))
 if (help) {
-  console.log('Usage: vendurl [--clean [--yes]] [--verbose] [--no-color]')
+  console.log('Usage: vendurl [--clean | -c [--yes | -y]] [--verbose | -v] [--no-color]')
   process.exit(0)
 }
 
