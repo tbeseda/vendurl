@@ -5,14 +5,17 @@ import process from 'node:process'
 import { createInterface } from 'node:readline/promises'
 import { URL } from 'node:url'
 
-const help = ['help', '--help', '-h'].some((arg) => process.argv.includes(arg))
+const { argv } = process
+
+const helpText = 'Usage: vendurl [--clean | -c [--yes | -y]] [--verbose | -v] [--no-color]'
+const help = ['help', '--help', '-h'].some((arg) => argv.includes(arg))
 if (help) {
-  console.log('Usage: vendurl [--clean | -c [--yes | -y]] [--verbose | -v] [--no-color]')
+  console.log(helpText)
   process.exit(0)
 }
 
 const s = (s) => s
-const { red, blue, green, grey } = process.env.NO_COLOR || process.argv.includes('--no-color')
+const { red, blue, green, grey } = process.env.NO_COLOR || argv.includes('--no-color')
   ? { red: s, blue: s, green: s, grey: s }
   : {
       red: s => `\u001b[31m${s}\u001b[39m`,
@@ -28,12 +31,13 @@ const packageString = fs.readFileSync(packagePath, 'utf8')
 const pkg = JSON.parse(packageString)
 const { name, vendurl } = pkg
 
-const verbose = ['--verbose', '-v'].some((arg) => process.argv.includes(arg))
-const clean = ['--clean', '-c'].some((arg) => process.argv.includes(arg))
-let yes = ['--yes', '-y'].some((arg) => process.argv.includes(arg))
+const verbose = ['--verbose', '-v'].some((arg) => argv.includes(arg))
+const clean = ['--clean', '-c'].some((arg) => argv.includes(arg))
+let yes = ['--yes', '-y'].some((arg) => argv.includes(arg))
 
 if (!(vendurl && vendurl.packages && typeof vendurl.packages === 'object')) {
-  throw new Error(`"${name} is missing "vendurl" in package.json`)
+  console.error(red(`"${name} is missing "vendurl" in package.json`))
+  process.exit(1)
 }
 
 // defaults
@@ -53,7 +57,7 @@ if (clean) {
 
     if (!yes) {
       console.log('Aborting')
-      process.exit(0)
+      process.exit(1)
     }
 
     fs.rmSync(fullDestination, { recursive: true, force: true })
@@ -78,7 +82,7 @@ for (const [filename, specifier] of Object.entries(packages)) {
   let url
   if (Array.isArray(specifier)) {
     ok = false
-    console.error(`Specifier should be a string or object. ${red(`Found array. Skipping "${filename}".`)}`)
+    console.error(`Specifier should be a string or object. ${red(`Found Array. Skipping "${filename}".`)}`)
   } else if (typeof specifier === 'object') {
     ok = false
     console.error(`Object specifier not yet supported. ${red(`Skipping "${filename}".`)}`)
@@ -108,6 +112,7 @@ for (let { filename, specifier, url } of manifest) {
       let response = await fetch(url)
 
       if (response.status !== 200) {
+        ok = false
         console.error(red(`Unable to fetch "${specifier}" from constructed URL: ${url}`))
         continue
       }
@@ -125,9 +130,11 @@ for (let { filename, specifier, url } of manifest) {
         fs.writeFileSync(path.join(fullDestination, filename), contents)
         console.log(`${blue('Saved')} "${filename}"${verbose ? `to ${destination}` : ''}`)
       } catch (error) {
+        ok = false
         console.error(red(`Unable to save "${filename}" to ${destination}`))
       }
     } catch (error) {
+      ok = false
       console.error(red(`Unable to download "${filename}" from ${url}`))
     }
   }

@@ -14,7 +14,7 @@
   <a href="#FAQ">FAQ</a>
 </p>
 
-> [!IMPORTANT]  
+> [!NOTE]  
 > `vendurl` is in no way intended to replace `npm` for dependency management. It is best utilized for vendoring a few, small packages that are not published in a way you'd like to consume.
 
 ## Installation and usage
@@ -67,7 +67,10 @@ Optional `package.json` additions:
 }
 ```
 
-### CLI Options
+### CLI Options and Exit Codes
+
+> [!IMPORTANT]  
+> `vendurl` will exit with code `1` if there are any errors, but will optimistically continue to vendor what it can.
 
 Verbose output is available with `--verbose` or `-v`:
 
