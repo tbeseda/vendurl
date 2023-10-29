@@ -1,6 +1,6 @@
 {
   "name": "vendurl",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Vendor (verb: download and store) a JS dependency from a URL.",
   "author": "tbeseda",
   "license": "Apache-2.0",
