@@ -4,6 +4,12 @@ import path from 'node:path'
 import process from 'node:process'
 import { URL } from 'node:url'
 
+const help = ['help', '--help', '-h'].some((arg) => process.argv.includes(arg))
+if (help) {
+  console.log('Usage: vendurl [--clean]')
+  process.exit(0)
+}
+
 const ESMSH = 'https://esm.sh/'
 const cwd = process.cwd()
 const packagePath = path.join(cwd, 'package.json')
