@@ -92,10 +92,10 @@ for (const [filename, specifier] of Object.entries(packages)) {
   } else if (typeof specifier === 'object') {
     const { specifier: pSpecifier, provider: pProvider, bundle: pBundle, ...rest } = specifier
     const url = createURL(pSpecifier, pBundle || bundle, pProvider || provider)
-    manifest.push({ filename, specifier: pSpecifier, url, ...rest })
+    manifest.push({ filename, url, specifier: pSpecifier, ...rest })
   } else if (typeof specifier === 'string') {
     const url = createURL(specifier, bundle, provider)
-    manifest.push({ filename, specifier, url })
+    manifest.push({ filename, url, specifier })
   } else {
     ok = false
     console.error(`Specifier should be a string or object. ${red(`Skipping "${filename}".`)}`)

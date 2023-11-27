@@ -51,7 +51,44 @@ import chalk from './vendor/chalk4.mjs';
 import leftpad from './vendor/leftpad.cjs';
 ```
 
-Optional `package.json` additions:
+### Options
+
+#### Optional `package.json` `vendurl` configuration:
+
+```js
+{
+  "vendurl": {
+    "destination": "./src/lib",       // default: "./vendor"
+    "provider": "https://unpkg.com/", // default: "https://esm.sh/"
+    "bundle": false,                  // esm.sh specific. default: true
+    "packages": { }
+  }
+}
+```
+
+#### Specifier options
+
+The specifier can be an object:
+
+```js
+{
+  "vendurl": {
+    "packages": {
+      "leftpad.cjs": {
+        "specifier": "leftpad@0.0.1/index.js",
+        "provider": "https://unpkg.com/",
+        "bundle": false
+      },
+      "robots.txt": {
+        "specifier": "https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/robots.txt/robots.txt",
+        "destination": "./public"
+      }
+    }
+  }
+}
+```
+
+#### npm postinstall
 
 ```js
 {
@@ -59,9 +96,6 @@ Optional `package.json` additions:
     "postinstall": "vendurl"
   },
   "vendurl": {
-    "destination": "./src/lib",       // default: "./vendor"
-    "provider": "https://unpkg.com/", // default: "https://esm.sh/"
-    "bundle": false,                  // esm.sh specific. default: true
     "packages": { }
   }
 }
@@ -78,7 +112,7 @@ Verbose output is available with `--verbose` or `-v`:
 npx vendurl --verbose
 ```
 
-Use the `--clean` flag to nuke the destination folder before downloading:
+Use the `--clean` flag to nuke the destination folder before downloading (this will not clean destinations specified in object specifiers):
 
 ```sh
 npx vendurl --clean
@@ -115,10 +149,6 @@ Not likely. The dependency graphs for some "modern" tools are a mess and rely on
 
 **Just JavaScript?**  
 `vendurl` will optimistically download any URL and put it in "./vendor". A `.css` file would probably work, but at that point you're venturing into build pipeline territory 🐉
-
-**Per-package configuration?**  
-💁 "I want to put some files ovr here, and some over there. All from different sources."  
-Working on it! Should be available in `v0.3.0`.
 
 **ESBuild options, WASM, and other esm.sh features?**  
 Good idea! I can work on that or feel free to send a PR.  

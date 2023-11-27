@@ -20,9 +20,9 @@
     "test": "cd test && bash ./test.sh"
   },
   "devDependencies": {
-    "eslint": "^8.52.0",
+    "eslint": "^8.54.0",
     "eslint-config-standard": "^17.1.0",
-    "release-it": "^16.2.1"
+    "release-it": "^17.0.0"
   },
   "eslintConfig": {
     "extends": "standard",
