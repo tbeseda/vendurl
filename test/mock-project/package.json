@@ -14,20 +14,10 @@
       "temporal.js": "@js-temporal/polyfill",
       "chalk4.mjs": "chalk@4",
       "leftpad.cjs": "https://unpkg.com/leftpad@0.0.1/index.js",
-      "yaml.js": {
-        "package": "yaml",
-        "version": "1.10.0",
-        "provider": "https://unpkg.com",
-        "destination": "./vendor/yaml",
-        "bundle": false,
-        "target": "es2021"
+      "robots.txt": {
+        "specifier": "https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/robots.txt/robots.txt",
+        "destination": "./public"
       },
-      "invalid": [
-        "arrays",
-        "are",
-        "not",
-        "supported"
-      ],
       "FAKE": "doesntexist@6.6.6"
     }
   }

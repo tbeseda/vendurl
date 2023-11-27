@@ -24,7 +24,21 @@ const { red, blue, green, grey } = process.env.NO_COLOR || argv.includes('--no-c
       grey: s => `\u001b[90m${s}\u001b[39m`,
     }
 
-const ESMSH = 'https://esm.sh/'
+function createURL (specifier, bundleParam, base) {
+  try {
+    return new URL(specifier)
+  } catch (err) {
+    try {
+      const url = new URL(specifier, base)
+      if (bundleParam) url.searchParams.set('bundle', 'true')
+      return url
+    } catch {
+      throw new Error(`Unable to parse "${specifier}" to URL`)
+    }
+  }
+}
+
+const ESM_SH = 'https://esm.sh/'
 const cwd = process.cwd()
 const packagePath = path.join(cwd, 'package.json')
 const packageString = fs.readFileSync(packagePath, 'utf8')
@@ -41,10 +55,10 @@ if (!(vendurl && vendurl.packages && typeof vendurl.packages === 'object')) {
 }
 
 // defaults
-const { bundle = true, destination = './vendor', packages, provider = ESMSH } = vendurl
-const fullDestination = path.join(cwd, destination)
+const { bundle = true, destination = './vendor', packages, provider = ESM_SH } = vendurl
 
 if (clean) {
+  const fullDestination = path.join(cwd, destination)
   try {
     if (!yes) {
       const rl = createInterface({ input: process.stdin, output: process.stdout })
@@ -62,41 +76,25 @@ if (clean) {
 
     fs.rmSync(fullDestination, { recursive: true, force: true })
 
-    if (verbose) console.log(`${blue('Deleted')} "${fullDestination.replace(cwd, '')}"`)
+    if (verbose) console.log(grey(`Deleted "${fullDestination.replace(cwd, '')}"`))
   } catch (error) {
     throw new Error(`Unable to remove "${fullDestination}"`)
   }
-}
-
-try {
-  await fs.mkdirSync(fullDestination, { recursive: true })
-  if (verbose) console.log(`${blue('Created')} "${fullDestination.replace(cwd, '')}"`)
-} catch (error) {
-  throw new Error(`Unable to create "${fullDestination}"`)
 }
 
 // parse packages
 let ok = true
 const manifest = []
 for (const [filename, specifier] of Object.entries(packages)) {
-  let url
   if (Array.isArray(specifier)) {
     ok = false
     console.error(`Specifier should be a string or object. ${red(`Found Array. Skipping "${filename}".`)}`)
   } else if (typeof specifier === 'object') {
-    ok = false
-    console.error(`Object specifier not yet supported. ${red(`Skipping "${filename}".`)}`)
+    const { specifier: pSpecifier, provider: pProvider, bundle: pBundle, ...rest } = specifier
+    const url = createURL(pSpecifier, pBundle || bundle, pProvider || provider)
+    manifest.push({ filename, specifier: pSpecifier, url, ...rest })
   } else if (typeof specifier === 'string') {
-    try {
-      url = new URL(specifier)
-    } catch (err) {
-      try {
-        url = new URL(specifier, provider)
-        if (bundle) url.searchParams.set('bundle', 'true')
-      } catch {
-        throw new Error(`Unable to parse "${specifier}" to URL`)
-      }
-    }
+    const url = createURL(specifier, bundle, provider)
     manifest.push({ filename, specifier, url })
   } else {
     ok = false
@@ -105,7 +103,10 @@ for (const [filename, specifier] of Object.entries(packages)) {
 }
 
 // download packages
-for (let { filename, specifier, url } of manifest) {
+for (let { filename, specifier, url, destination: pDestination } of manifest) {
+  const outputPath = pDestination || destination
+  const fullOutputPath = path.join(cwd, outputPath)
+
   if (url) {
     if (verbose) console.log(grey(`Creating "${filename}" from "${specifier}"`))
     try {
@@ -127,15 +128,28 @@ for (let { filename, specifier, url } of manifest) {
       const contents = await response.text()
 
       try {
-        fs.writeFileSync(path.join(fullDestination, filename), contents)
-        console.log(`${blue('Saved')} "${filename}"${verbose ? `to ${destination}` : ''}`)
+        if (!fs.existsSync(fullOutputPath)) {
+          fs.mkdirSync(fullOutputPath, { recursive: true })
+          if (verbose) console.log(grey(`Created "${outputPath}"`))
+        }
+      } catch (error) {
+        console.error(red(`Unable to create "${fullOutputPath}"`))
+        if (verbose) console.error(error)
+        continue
+      }
+
+      try {
+        fs.writeFileSync(path.join(fullOutputPath, filename), contents)
+        console.log(`${blue('Saved')} "${filename}"${verbose ? `to ${outputPath}` : ''}`)
       } catch (error) {
         ok = false
-        console.error(red(`Unable to save "${filename}" to ${destination}`))
+        console.error(red(`Unable to save "${filename}" to ${fullOutputPath}`))
+        if (verbose) console.error(error)
       }
     } catch (error) {
       ok = false
       console.error(red(`Unable to download "${filename}" from ${url}`))
+      if (verbose) console.error(error)
     }
   }
 }
